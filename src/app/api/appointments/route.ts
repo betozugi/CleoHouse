@@ -17,9 +17,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing Google credentials' }, { status: 500 });
     }
 
+    let formattedKey = privateKey;
+    if (formattedKey.startsWith('"') && formattedKey.endsWith('"')) {
+      formattedKey = formattedKey.slice(1, -1);
+    } else if (formattedKey.startsWith("'") && formattedKey.endsWith("'")) {
+      formattedKey = formattedKey.slice(1, -1);
+    }
+    formattedKey = formattedKey.replace(/\\n/g, '\n');
+
     const serviceAccountAuth = new JWT({
       email: email,
-      key: privateKey.replace(/\\n/g, '\n'),
+      key: formattedKey,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 
@@ -104,9 +112,17 @@ export async function GET() {
       return NextResponse.json({ error: 'Missing Google credentials' }, { status: 500 });
     }
 
+    let formattedKey = privateKey;
+    if (formattedKey.startsWith('"') && formattedKey.endsWith('"')) {
+      formattedKey = formattedKey.slice(1, -1);
+    } else if (formattedKey.startsWith("'") && formattedKey.endsWith("'")) {
+      formattedKey = formattedKey.slice(1, -1);
+    }
+    formattedKey = formattedKey.replace(/\\n/g, '\n');
+
     const serviceAccountAuth = new JWT({
       email: email,
-      key: privateKey.replace(/\\n/g, '\n'),
+      key: formattedKey,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 
